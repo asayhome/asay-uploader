@@ -1,177 +1,206 @@
 <div wire:ignore>
-    <div id="{{$editorId}}"></div>
+    <div id="{{$uploaderId}}"></div>
 </div>
-@push(config('asayeditor.pushed-scripts-container'))
-<script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
-@if (in_array($language,['ar']))
-<script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/translations/{{$language}}.js"></script>
-@endif
-
+@push(config('asayuploader.pushed-scripts-container'))
+<script src="https://releases.transloadit.com/uppy/v2.12.3/uppy.min.js"></script>
 <script>
-    let editorOptions={
-            language:'{{$language}}',
-                // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
-                toolbar: {
-                    items: [
-                        'exportPDF','exportWord', '|',
-                        'findAndReplace', 'selectAll', '|',
-                        'heading', '|',
-                        'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-                        'bulletedList', 'numberedList', 'todoList', '|',
-                        'outdent', 'indent', '|',
-                        'undo', 'redo',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-                        'alignment', '|',
-                        'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak', '|',
-                        'textPartLanguage', '|',
-                        'sourceEditing'
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                // Changing the language of the interface requires loading the language file using the <script> tag.
-                // language: 'es',
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
-                    }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                    ]
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
-                placeholder: '{{__($placeholder)}}',
-                // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
-                fontFamily: {
-                    options: [
-                        'default',
-                        'Arial, Helvetica, sans-serif',
-                        'Courier New, Courier, monospace',
-                        'Georgia, serif',
-                        'Lucida Sans Unicode, Lucida Grande, sans-serif',
-                        'Tahoma, Geneva, sans-serif',
-                        'Times New Roman, Times, serif',
-                        'Trebuchet MS, Helvetica, sans-serif',
-                        'Verdana, Geneva, sans-serif'
-                    ],
-                    supportAllValues: true
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-size-feature
-                fontSize: {
-                    options: [ 10, 12, 14, 'default', 18, 20, 22 ],
-                    supportAllValues: true
-                },
-                // Be careful with the setting below. It instructs CKEditor to accept ALL HTML markup.
-                // https://ckeditor.com/docs/ckeditor5/latest/features/general-html-support.html#enabling-all-html-features
-                htmlSupport: {
-                    allow: [
-                        {
-                            name: /.*/,
-                            attributes: true,
-                            classes: true,
-                            styles: true
-                        }
-                    ]
-                },
-                // Be careful with enabling previews
-                // https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html#content-previews
-                htmlEmbed: {
-                    showPreviews: true
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/link.html#custom-link-attributes-decorators
-                link: {
-                    decorators: {
-                        addTargetToExternalLinks: true,
-                        defaultProtocol: 'https://',
-                        toggleDownloadable: {
-                            mode: 'manual',
-                            label: 'Downloadable',
-                            attributes: {
-                                download: 'file'
-                            }
-                        }
-                    }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#configuration
-                mention: {
-                    feeds: [
-                        {
-                            marker: '@',
-                            feed: [
-                                '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
-                                '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
-                                '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
-                                '@sugar', '@sweet', '@topping', '@wafer'
-                            ],
-                            minimumCharacters: 1
-                        }
-                    ]
-                },
-                // The "super-build" contains more premium features that require additional configuration, disable them below.
-                // Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
-                removePlugins: [
-                    // These two are commercial, but you can try them out without registering to a trial.
-                    // 'ExportPdf',
-                    // 'ExportWord',
-                    'CKBox',
-                    'CKFinder',
-                    'EasyImage',
-                    // This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
-                    // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
-                    // Storing images as Base64 is usually a very bad idea.
-                    // Replace it on production website with other solutions:
-                    // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
-                    // 'Base64UploadAdapter',
-                    'RealTimeCollaborativeComments',
-                    'RealTimeCollaborativeTrackChanges',
-                    'RealTimeCollaborativeRevisionHistory',
-                    'PresenceList',
-                    'Comments',
-                    'TrackChanges',
-                    'TrackChangesData',
-                    'RevisionHistory',
-                    'Pagination',
-                    'WProofreader',
-                    // Careful, with the Mathtype plugin CKEditor will not load when loading this sample
-                    // from a local file system (file://) - load this site via HTTP server if you enable MathType
-                    'MathType'
-                ],
-            };
+    let uploaderFiles = [];
 
-            const editor=ClassicEditor
-        .create( document.querySelector( '#{{$editorId}}'),editorOptions )
-        .then(editor=>{
+    function getFileObject(currentFile) {
+        var sizeLabel = "bytes";
+          var filesize = currentFile.size;
+          if (filesize > 1024) {
+            filesize = filesize / 1024;
+            sizeLabel = "kb";
+            if (filesize > 1024) {
+              filesize = filesize / 1024;
+              sizeLabel = "MB";
+            }
+          }
+          return {
+            name: currentFile.name,
+            size: Math.round(filesize, 2) + " " + sizeLabel,
+            file: currentFile.data,
+            mime_type: currentFile.type,
+            path: URL.createObjectURL(currentFile.data),
+          };
+    }
 
-            editor.setData('{{$content}}');
+    let arLocale={
+  strings: {
+    addMore: 'أضف المزيد',
+  addMoreFiles: 'اضف المزيد من الملفات',
+  addingMoreFiles: ' اضافة المزيد من الملفات',
+  allowAccessDescription: 'ارجو السماح للموقع بالتقاط الصور والفديوهات.',
+  allowAccessTitle: 'ارجو السماح للكاميرا بالتقاط صورك',
+  authenticateWith: '%{pluginName} الربط مع',
+  authenticateWithTitle: 'من اجل اختيار الملفات %{pluginName} الرجاء الربط مع ',
+  back: 'رجوع',
+  browse: 'تصفح',
+  browseFiles: 'تصفح',
+  cancel: 'الغاء',
+  cancelUpload: 'الغاء الدفع',
+  chooseFiles: 'اختار الملفات',
+  closeModal: 'اغلاق الشكل',
+  companionError: 'الربط مع Companion فشل',
+  complete: ' اكتمل ',
+  connectedToInternet: 'موصل بالانترنت',
+  copyLink: 'انسخ الرابط',
+  copyLinkToClipboardFallback: 'انسخ الرابط في الاسفل',
+  copyLinkToClipboardSuccess: 'تم نسخ الرابط',
+  creatingAssembly: 'تجهيز الرفع...',
+  creatingAssemblyFailed: 'Transloadit: لم يستطع التجميع',
+  dashboardTitle: 'رافع الملفات',
+  dashboardWindowTitle: 'نافذة رفع الملفات (ارجع للاغلاق)',
+  dataUploadedOfTotal: '%{complete} من اصل %{total}',
+  done: 'انتهى',
+  dropHereOr: 'او  اسحب الملفات هنا %{browse}',
+  dropHint: 'او  اسحب الملفات هنا %{browse}',
+  dropPasteBoth: 'او  اسحب الملفات هنا %{browse}',
+  dropPasteFiles: 'او  اسحب الملفات هنا %{browse}',
+  dropPasteFolders: 'او  اسحب الملفات هنا %{browse}',
+  dropPasteImportBoth: 'او  اسحب الملفات هنا %{browse}',
+  dropPasteImportFiles: 'او  اسحب الملفات هنا %{browse}',
+  dropPasteImportFolders: 'او  اسحب الملفات هنا %{browse}',
+  editFile: 'تعديل الملف',
+  editing: 'جاري تعديل %{file}',
+  emptyFolderAdded: 'لا يوجد ملفات او مجلدات هنا',
+  encoding: 'التشفير...',
+  enterCorrectUrl: 'خطأ في الرابط: ارجو التأكد من ادخال رابط مباشر للملف',
+  enterUrlToImport: 'ادخل الرابط لاستيراد الملفات',
+  exceedsSize: 'الملف اكبر من الحجم المسموح %{size}',
+  failedToFetch: 'Companion فشل في جلب الرابط, ارجو التأكد من الرابط',
+  failedToUpload: 'فشل الرفع %{file}',
+  fileSource: 'مصدر الملف: %{name}',
+  filesUploadedOfTotal: {
+    '0': '%{complete} من %{smart_count} تم رفع ملف',
+    '1': '%{complete} من %{smart_count} تم رفع ملفات',
+    '2': '%{complete} من %{smart_count} تم رفع ملفات',
+  },
+  filter: 'تصفيه',
+  finishEditingFile: 'انهاء تعديل الملف',
+  folderAdded: {
+    '0': '%{folder} ملف من %{smart_count} تم اضافة',
+    '1': '%{folder} ملفات من %{smart_count} تم اضافة',
+    '2': '%{folder} ملفات من %{smart_count} تم اضافة',
+  },
+  import: 'استيراد',
+  importFrom: 'استيراد من %{name}',
+  loading: 'جاري التحميل...',
+  logOut: 'تسجيل الخروج',
+  myDevice: 'جهازي',
+  noFilesFound: 'لا يوجد ملفات او مجلدات هنا',
+  noInternetConnection: 'لا يوجد اتصال بالانترنت',
+  pause: 'ايقاف',
+  pauseUpload: 'ايقاف الرفع',
+  paused: 'موقف',
+  poweredBy: 'مشغل ب',
+  processingXFiles: {
+    '0': 'ملف %{smart_count} جاري معالجة',
+    '1': 'ملفات %{smart_count}  جاري معالجة',
+    '2': 'ملفات %{smart_count} جاري معالجة ',
+  },
+  removeFile: 'امسح الملف',
+  resetFilter: 'اعادة ضبط التصفيه',
+  resume: 'استئناف',
+  resumeUpload: 'استئناف الرفع',
+  retry: 'اعادة المحاولة',
+  retryUpload: 'اعادة الرفع',
+  saveChanges: 'حفظ التغييرات',
+  selectX: {
+    '0': '%{smart_count} اختر',
+    '1': '%{smart_count} اختر',
+    '2': '%{smart_count} اختر',
+  },
+  smile: 'ابتسم!',
+  startRecording: 'بدء تسجيل الفيديو',
+  stopRecording: 'ايقاف تسجيل الفيديو',
+  takePicture: 'التقط صوره',
+  timedOut: 'رفع تأخر ب %{seconds} ثواني, الغاء الرفع.',
+  upload: 'رفع',
+  uploadComplete: 'الرفع اكتمل',
+  uploadFailed: 'الرفع فشل',
+  uploadPaused: 'الرفع موقف',
+  uploadXFiles: {
+    '0': 'رفع %{smart_count} ملف',
+    '1': 'رفع %{smart_count} ملفات',
+    '2': 'رفع %{smart_count} ملفات',
+  },
+  uploadXNewFiles: {
+    '0': 'رفع +%{smart_count} ملف',
+    '1': 'رفع +%{smart_count} ملفات',
+    '2': 'رفع +%{smart_count} ملفات',
+  },
+  uploading: 'يتم الرفع',
+  uploadingXFiles: {
+    '0': 'يتم رفع %{smart_count} ملف',
+    '1': 'يتم رفع %{smart_count} ملفات',
+    '2': 'يتم رفع %{smart_count} ملفات',
+  },
+  xFilesSelected: {
+    '0': '%{smart_count} ملف محددة',
+    '1': '%{smart_count} ملفات محددة',
+    '2': '%{smart_count} ملفات محددة',
+  },
+  xMoreFilesAdded: {
+    '0': '%{smart_count} ملف اضافي جديد',
+    '1': '%{smart_count} ملفات اضافيه جديده',
+    '2': '%{smart_count} ملفات اضافيه جديده',
+  },
+  xTimeLeft: '%{time} متبقي',
+  youCanOnlyUploadFileTypes: 'تستطيع فقط رفع : %{types}',
+  youCanOnlyUploadX: {
+    '0': 'تستطيع فقط رفع %{smart_count} الملف',
+    '1': 'تستطيع فقط رفع %{smart_count} ملفات',
+    '2': 'تستطيع فقط رفع %{smart_count} ملفات',
+  },
+  youHaveToAtLeastSelectX: {
+    '0': 'يجب ان تختار على الاقل  %{smart_count} ملف',
+    '1': 'يجب ان تختار على الاقل  %{smart_count} ملفات',
+    '2': 'يجب ان تختار على الاقل  %{smart_count} ملفات',
+  },
+  selectFileNamed: '%{name} اختر الملف',
+  unselectFileNamed: '%{name} إلغاء تحديد الملف',
+  openFolderNamed: '%{name} افتح المجلد',
+  },
+}
 
-            editor.model.document.on('change:data', function() {
-                Livewire.emit('{{$firedEvent}}',editor.getData());
-                });
+    let language='{{$language}}';
+
+    var uppy = new Uppy.Core(
+       {
+        onBeforeFileAdded: (currentFile, files) => {
+          uploaderFiles.push(getFileObject(currentFile));
+          Livewire.emit('{{$firedEvent}}',uploaderFiles);
+        },
+        locale:language=='ar'?arLocale:''
         })
-        .catch( error => {
-            console.error( error );
-        } );
+    .use(Uppy.Dashboard, {
+      inline: true,
+      target: '#{{$uploaderId}}',
+      showProgressDetails: true,
+      height: '{{$containerHeight}}',
+      browserBackButtonClose: false,
+      hideUploadButton: true,
+    })
 
-       
-
+    uppy.on('file-removed', (file, reason) => {
+        uploaderFiles=[];
+        uppy.getFiles().map((file) =>{
+            uploaderFiles.push(getFileObject(file));
+        });
+        Livewire.emit('{{$firedEvent}}',uploaderFiles);
+});
+   
+   
+    
 </script>
 @endpush
-@push(config('asayeditor.pushed-styles-container'))
+@push(config('asayuploader.pushed-styles-container'))
+<link href="https://releases.transloadit.com/uppy/v2.12.3/uppy.min.css" rel="stylesheet">
 <style>
-    .ck-editor__editable {
-        /* editing area */
-        height: <?php echo $height;
+    .uppy-size--lg .uppy-Dashboard-Item-preview {
+        height: <?php echo $imageHeight;
         ?>;
     }
 

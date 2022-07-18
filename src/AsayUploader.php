@@ -6,27 +6,30 @@ use Livewire\Component;
 
 class AsayUploader extends Component
 {
-    public $editorId;
-    public $height;
+    public $uploaderId;
+    public $containerHeight;
+    public $imageHeight;
     public $language;
     public $placeholder;
     public $firedEvent;
 
     public function mount(
-        $id = 'editor',
-        $height = '200px',
+        $id = 'uploader',
+        $containerHeight = '200px',
+        $imageHeight = '70px',
         $language = 'en',
         $placeholder = 'Type her...',
-        $firedEvent = 'textChange',
+        $firedEvent = 'uploaderChange',
     ) {
-        $this->editorId = $id;
-        $this->height = $height;
+        $this->uploaderId = $id;
+        $this->containerHeight = $containerHeight;
+        $this->imageHeight = $imageHeight;
         $this->language = $language;
         $this->placeholder = $placeholder;
         $this->firedEvent = $firedEvent;
     }
     public function render()
     {
-        return view('asayeditor::uploader');
+        return view('asayuploader::uploader');
     }
 }
