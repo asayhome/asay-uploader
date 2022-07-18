@@ -1,0 +1,24 @@
+{
+    "name": "asayhome/asay-uploader",
+    "description": "This package upload files inside liveware component array varible, that mean's you can upload multiple files, when adding file the package auto send the file object to fired event so that you can get uploaded files in any place you wont by catching the fired event, all working step will be descriped in next sections.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Asayhome\\AsayUploader\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Abdelrahman Saeed Elhassan",
+            "email": "abdosaeedelhassan@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Asayhome\\AsayUploader\\AsayUploaderServiceProvider"
+            ]
+        }
+    },
+    "require": {}
+}
