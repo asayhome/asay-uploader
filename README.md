@@ -68,7 +68,7 @@ as follow:
 ```
  protected $listeners = ['uploaderChange'];
 
- public function uploaderChange($content)
+ public function uploaderChange($fiels)
     {
         ...
     }
